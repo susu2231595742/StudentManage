@@ -6,6 +6,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +19,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import dao.CourseDao;
 import dao.SelectedCourseDao;
 import dao.StudentDao;
+import dao.TeacherDao;
 import model.Course;
 import model.SelectedCourse;
 import model.Student;
 import util.DbUtil;
+import util.StringUtil;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -38,6 +42,7 @@ public class AddScoreFrm extends JInternalFrame {
 	private CourseDao courseDao = new CourseDao();
 	private StudentDao studentDao = new StudentDao();
 	private SelectedCourseDao selectedCourseDao = new SelectedCourseDao();
+	private TeacherDao teacherDao = new TeacherDao();
 
 	/**
 	 * Launch the application.
@@ -83,6 +88,11 @@ public class AddScoreFrm extends JInternalFrame {
 		scoreTxt.setColumns(10);
 		
 		JButton btnNewButton = new JButton("\u5F55\u5165\u6210\u7EE9");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addScoreAction(e);
+			}
+		});
 		btnNewButton.setIcon(new ImageIcon(AddScoreFrm.class.getResource("/images/\u786E\u8BA4.png")));
 		btnNewButton.setFont(new Font("宋体", Font.BOLD, 16));
 		
@@ -145,8 +155,68 @@ public class AddScoreFrm extends JInternalFrame {
 		);
 		getContentPane().setLayout(groupLayout);
 		
-		
+		fillCourseJcb();
+		fillStudentJcb();
 
+	}
+
+	private void addScoreAction(ActionEvent e) {
+		Student student = (Student) this.stuNameJcb.getSelectedItem();
+		Course course = (Course) this.courseJcb.getSelectedItem();
+		String score = this.scoreTxt.getText();
+		if (StringUtil.isEmpty(score)) {
+			JOptionPane.showMessageDialog(this, "请输入成绩！");
+			return;
+		}
+		SelectedCourse selectedCourse = new SelectedCourse();
+		selectedCourse.setStudent_id(student.getStuId());
+		selectedCourse.setCourse_id(course.getId());
+		selectedCourse.setScore(Integer.parseInt(score));
+		
+		Connection con = null;
+		try {
+			con = dbUtil.getConnection();
+			boolean isSelected = selectedCourseDao.isSelected(con, selectedCourse);
+			if (!isSelected) {
+				JOptionPane.showMessageDialog(this, "该学生没有选过该课程，无法录入成绩");
+				this.scoreTxt.setText("");
+				return;
+			}
+			int addNum = selectedCourseDao.updateScore(con, selectedCourse);
+			if (addNum == 1) {
+				JOptionPane.showMessageDialog(this, "成绩录入成功！");
+				resetValueAct(e);
+				return;
+			}else {
+				JOptionPane.showMessageDialog(this, "录入失败！");
+				return;
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}finally {
+			dbUtil.closeCon(con);
+		}
+	}
+
+	private void fillStudentJcb() {
+		Connection con = null;
+		Student student = null;
+		try {
+			con = dbUtil.getConnection();
+			ResultSet rs = studentDao.list(con, new Student());
+			while(rs.next()) {
+				student = new Student();
+				student.setStuName(rs.getString("stuName"));
+				student.setStuId(rs.getInt("stuId"));
+				this.stuNameJcb.addItem(student);
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			dbUtil.closeCon(con);
+		}
 	}
 
 	//重置
@@ -156,6 +226,34 @@ public class AddScoreFrm extends JInternalFrame {
 		this.scoreTxt.setText("");
 	}
 	
+	private void fillCourseJcb() {
+		Connection con = null;
+		Course course= null;
+		try {
+			con = dbUtil.getConnection();
+			ResultSet rs = courseDao.list(con, new Course());
+			while(rs.next()) {
+				course = new Course();
+				course.setCoursename(rs.getString("coursename"));
+				course.setId(rs.getInt("id"));
+				course.setTeacherId(rs.getInt("teacherId"));
+				if ("教师".equals(MainFrame.userType.getUsertypeName())) {
+					String teachername = MainFrame.user.getUsername();
+					int teacher_id = teacherDao.getTeacher_idByTeachername(con, teachername);
+					if (course.getTeacherId() == teacher_id) {
+						this.courseJcb.addItem(course);
+					}
+					continue;
+				}
+				this.courseJcb.addItem(course);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			dbUtil.closeCon(con);
+		}
+	}
 	
 	
 	

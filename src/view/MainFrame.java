@@ -38,6 +38,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem addCourseFrmItem;
 	private JMenuItem manageCourseFrmItem;
 	private JMenuItem manageSelectedCourseFrmItem;
+	private JMenuItem addScoreFrmItem;
 	
 	private JMenu manageStudentMenu;
 	private JMenu manageStudentclassMenu;
@@ -243,29 +244,38 @@ public class MainFrame extends JFrame {
 		manageScoreMenu.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
 		menuBar.add(manageScoreMenu);
 		
-		JMenuItem mntmNewMenuItem_9 = new JMenuItem("\u5F55\u5165\u6210\u7EE9");
-		mntmNewMenuItem_9.addActionListener(new ActionListener() {
+		addScoreFrmItem = new JMenuItem("\u5F55\u5165\u6210\u7EE9");
+		addScoreFrmItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AddScoreFrm addScoreFrm = new AddScoreFrm();
 				addScoreFrm.setVisible(true);
 				table.add(addScoreFrm);
 			}
 		});
-		mntmNewMenuItem_9.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u6DFB\u52A0.png")));
-		mntmNewMenuItem_9.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
-		manageScoreMenu.add(mntmNewMenuItem_9);
+		addScoreFrmItem.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u6DFB\u52A0.png")));
+		addScoreFrmItem.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
+		manageScoreMenu.add(addScoreFrmItem);
 		
-		JMenuItem mntmNewMenuItem_10 = new JMenuItem("\u6210\u7EE9\u67E5\u770B");
-		mntmNewMenuItem_10.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u67E5\u770B.png")));
-		mntmNewMenuItem_10.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
-		manageScoreMenu.add(mntmNewMenuItem_10);
-		
-		JMenuItem mntmNewMenuItem_11 = new JMenuItem("\u6210\u7EE9\u7BA1\u7406");
-		mntmNewMenuItem_11.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u6210\u7EE9.png")));
-		mntmNewMenuItem_11.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
-		manageScoreMenu.add(mntmNewMenuItem_11);
+		JMenuItem ManageScoreFrmItem = new JMenuItem("\u6210\u7EE9\u7BA1\u7406");
+		ManageScoreFrmItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ManageScoreFrm manageScoreFrm = new ManageScoreFrm();
+				manageScoreFrm.setVisible(true);
+				table.add(manageScoreFrm);
+			}
+		});
+		ManageScoreFrmItem.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u6210\u7EE9.png")));
+		ManageScoreFrmItem.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
+		manageScoreMenu.add(ManageScoreFrmItem);
 		
 		JMenuItem mntmNewMenuItem_12 = new JMenuItem("\u6210\u7EE9\u7EDF\u8BA1");
+		mntmNewMenuItem_12.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StatsScoreFrm scoreFrm = new StatsScoreFrm();
+				scoreFrm.setVisible(true);
+				table.add(scoreFrm);
+			}
+		});
 		mntmNewMenuItem_12.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u7EDF\u8BA1.png")));
 		mntmNewMenuItem_12.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
 		manageScoreMenu.add(mntmNewMenuItem_12);
@@ -276,6 +286,11 @@ public class MainFrame extends JFrame {
 		menuBar.add(mnNewMenu_7);
 		
 		JMenuItem mntmNewMenuItem_8 = new JMenuItem("\u5173\u4E8E\u6211\u4EEC");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		mntmNewMenuItem_8.setIcon(new ImageIcon(MainFrame.class.getResource("/images/\u5173\u4E8E\u6211\u4EEC.png")));
 		mntmNewMenuItem_8.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
 		mnNewMenu_7.add(mntmNewMenuItem_8);
@@ -306,6 +321,7 @@ public class MainFrame extends JFrame {
 			this.manageTeacherMenu.setEnabled(false);
 			this.manageCourseMenu.setEnabled(false);
 			this.manageStudentclassMenu.setEnabled(false);
+			this.addScoreFrmItem.setEnabled(false);
 		}
 		if ("ΩÃ ¶".equals(userType.getUsertypeName())) {
 			this.addTeacherFrmItem.setEnabled(false);

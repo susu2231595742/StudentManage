@@ -15,6 +15,13 @@ public class SelectedCourse {
 		super();
 		this.student_id = student_id;
 	}
+	
+	public SelectedCourse(int student_id, int course_id, int score) {
+		super();
+		this.student_id = student_id;
+		this.course_id = course_id;
+		this.score = score;
+	}
 	public int getId() {
 		return id;
 	}

@@ -197,6 +197,7 @@ public class RegisterFrame extends JFrame {
 					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
+		this.setLocationRelativeTo(null);//设置窗口居中显示
 		this.fillUserType();
 	}
 
@@ -208,15 +209,15 @@ public class RegisterFrame extends JFrame {
 		String password = new String(this.passwordTxt.getPassword());
 		String repeatpassword = new String(this.repeatpasswordTxt.getPassword());
 		if (StringUtil.isEmpty(username)) {
-			JOptionPane.showMessageDialog(null, "用户名不能为空！");
+			JOptionPane.showMessageDialog(this, "用户名不能为空！");
 			return;
 		}
 		if (StringUtil.isEmpty(password)) {
-			JOptionPane.showMessageDialog(null, "密码不能为空！");
+			JOptionPane.showMessageDialog(this, "密码不能为空！");
 			return;
 		}
 		if (StringUtil.isEmpty(repeatpassword)) {
-			JOptionPane.showMessageDialog(null, "确认密码不能为空！");
+			JOptionPane.showMessageDialog(this, "确认密码不能为空！");
 			return;
 		}
 		if (password.equals(repeatpassword)) {
@@ -224,18 +225,23 @@ public class RegisterFrame extends JFrame {
 			User user = new User(username,password,usertypeId);
 			try {
 				con = dbUtil.getConnection();
+				boolean isUserExist = userDao.isUserExist(con, user);
+				if (isUserExist) {
+					JOptionPane.showMessageDialog(this, "该用户名已经存在！");
+					return;
+				}
 				int addNum = userDao.addUser(con, user);
 				if (addNum == 1) {
-					JOptionPane.showMessageDialog(null, "注册成功！");
+					JOptionPane.showMessageDialog(this, "注册成功！");
 					this.resetValueActionPerformed(e);
 				}else {
-					JOptionPane.showMessageDialog(null, "注册失败！");
+					JOptionPane.showMessageDialog(this, "注册失败！");
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
  		}else {
-			JOptionPane.showMessageDialog(null, "两次输入不一致！");
+			JOptionPane.showMessageDialog(this, "两次输入不一致！");
 		}
 		
 	}

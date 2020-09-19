@@ -47,4 +47,17 @@ public class TeacherDao {
 		return pstmt.executeUpdate();
 		
 	}
+	public int getTeacher_idByTeachername(Connection con, String teachername)throws Exception {
+		String sql = "select *from s_teacher where teacherName=?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, teachername);
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			return id;
+		}
+		return 0;
+	}
 }
+
+	

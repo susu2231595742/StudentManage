@@ -85,4 +85,15 @@ public class UserDao {
 		}
 		return 0;	
 	}
+	public boolean isUserExist(Connection con, User user)throws Exception{
+		String sql = "select * from s_user where username = ? and usertypeId=?";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, user.getUsername());
+		pstmt.setInt(2, user.getUsertypeId());
+		ResultSet rs = pstmt.executeQuery();
+		if (rs.next()) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -205,7 +205,6 @@ public class LoginFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 	}
 	
 	//初始化用户类型下拉框
